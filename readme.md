@@ -1,29 +1,60 @@
-# User Management Simple Microservices (Spring Boot + WebFlux + PostgreSQL)
+# Simple Microservices – User Management (Spring Boot + WebFlux + PostgreSQL)
 
-This application implements a microservice architecture with **Direct Client-to-Service Communication**.
+This project implements a simple microservices architecture for user management using Spring Boot, WebFlux, and PostgreSQL.
 
 ---
 
-## Services Description
+## Architecture Overview
 
-- **service-user**: Handles basic CRUD operations related to users, built with **Spring Boot WebFlux**
-- **service-department**: Handles CRUD operations and management of department data.  
-- **service-address**: Handles CRUD operations and management of address data.  
+This project implements a **Simple Microservices** architecture with **Direct Client-to-Microservice Communication**, featuring an aggregation layer inside the `user-service`.
 
-Each service is independent, self-contained, and can be developed, built, and deployed separately.
+### How it works:
+
+- Each microservice (`user-service`, `department-service`, `address-service`) runs independently on its own server and port, with its own database.
+- Clients (frontend apps, Postman, etc.) can access each service directly via its REST API, without an API Gateway or Backend-for-Frontend (BFF).
+- `user-service` uses WebClient (Spring WebFlux) to fetch department and address data from other services, aggregating them before returning to the client.
+
+### Summary of key points:
+
+| Feature                | Description                                            |
+|------------------------|--------------------------------------------------------|
+| Services               | Independent apps with own DB and ports                |
+| Client communication   | Direct REST calls to each service                     |
+| Inter-service comm.    | HTTP via WebClient/WebFlux inside `user-service`      |
+| Aggregation            | `user-service` aggregates department & address data   |
+| API Gateway            | Not used                                               |
+
+---
+
+## Services Overview
+
+- **service-user**: CRUD for user data, uses Spring Boot WebFlux and aggregates department & address info from other services.
+- **service-department**: CRUD for department data.
+- **service-address**: CRUD for address data.
+
+Each service is self-contained, with its own database and can be developed, deployed, and scaled independently.
+
+---
+
+## Architecture Diagram
+
+<p align="center">
+  <img src="rancangan-sistem.png" alt="Architecture Diagram" width="600"/>
+</p>
 
 ---
 
 ## Communication Model
 
-**Direct Client-to-Service Communication**  
-Clients (frontend apps or external consumers) communicate **directly** with each microservice via its own REST API.  
-No API Gateway is used in this architecture to route or aggregate requests.
+**Direct Client-to-Microservice Communication**
 
-### Advantages
-- Simplicity in architecture  
-- Faster development in early-stage microservices  
-- Each service exposes its own API independently  
+Clients (e.g. frontend apps, Postman) communicate directly with each microservice via REST API endpoints.  
+No API Gateway or BFF layer is used in this setup.
+
+### Advantages:
+- Simple architecture
+- Easy to develop and test services independently
+- Clear service boundaries and responsibilities
 
 ---
 
@@ -45,6 +76,7 @@ No API Gateway is used in this architecture to route or aggregate requests.
 
 ### Service-User
 
+- `spring-boot-starter-web`  
 - `spring-boot-starter-webflux`  
 - `spring-boot-starter-data-jpa`  
 - `postgresql`  
